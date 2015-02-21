@@ -15,7 +15,7 @@ Please see CookBook.md for more in-dept explanation of the process
 ## Run
 To run this program from RStudio
 
-1. et working directory,
+1. Set working directory,
 
 	```
 	$ setwd('<directory_where_run_analysis_r_is_located>')
