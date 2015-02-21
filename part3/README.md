@@ -15,16 +15,17 @@ Please see CookBook.md for more in-dept explanation of the process
 ## Run
 To run this program from RStudio
 
-1. Set working directory,
+1. et working directory,
 
-```
-$ setwd('<directory_where_run_analysis_r_is_located>')
-```
+	```
+	$ setwd('<directory_where_run_analysis_r_is_located>')
+	```
 
 2. Source it 
-```
-$ source("run_analysis.R")
-```
+
+	```
+	$ source("run_analysis.R")
+	```
 
 
 To run this program from console
