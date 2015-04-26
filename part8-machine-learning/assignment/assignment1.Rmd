@@ -70,7 +70,7 @@ table(data.pred, testset$classe)
 confusionMatrix(data.pred, testset$classe)
 ```
 
-Based on this exercise, the prediction model has produced an accuracy of 99.63 with kappa value of 0.9953
+Based on this exercise, the prediction model has produced an accuracy of 99.64 with kappa value of 0.9955
 
 For validation, evaluated against the testing data. 
 
