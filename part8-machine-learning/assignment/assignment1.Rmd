@@ -1,0 +1,74 @@
+---
+title: "Assignment1"
+output: html_document
+---
+# Abstract 
+
+This document attempts to quantify "how well they do" weight lifting exercise.  The dataset for this document is based on [http://groupware.les.inf.puc-rio.br/har](http://groupware.les.inf.puc-rio.br/har).
+
+This report outlines the steps for the prediction model development. 
+
+# Loading and Preprocessing of the data
+
+```{r}
+set.seed(2334)
+```
+
+Loading of the dataset.  Also in this loading step, the following *#DIV/0!* is assumed to be NA.
+```{r}
+data <- read.csv("./pml-training.csv", na.strings=c("#DIV/0!") )
+testing <- read.csv("./pml-testing.csv")
+```
+
+For the purposes of this model development.  The following columns ("X", "user_name", "raw_timestamp_part_1", "raw_timestamp_part_2", "cvtd_timestamp", "new_window", "num_window") are also removed.  These columns would introduce a lot more noise.
+```{r}
+noisycols <- c("X", "user_name", "raw_timestamp1_part_1", "raw_timestamp_part_2", "cvtd_timestamp", "new_window", "num_window")
+data <- data[,-which(names(data) %in% noisycols)]
+```
+
+Also removed are columns which have NA as its values.
+```{r}
+nacols <- apply(data, 2, function(x) {
+     sum(is.na(x))
+})
+data <- data[,which(nacols == 0)]
+testing <- testing[,which(nacols == 0)]
+```
+
+# Partitioning of the data
+
+A 70% data split is used to partition the data between training set and test set
+
+```{r}
+inTrain <- createDataPartition(y=data$classe, p=0.7, list=FALSE)
+trainset <- data[inTrain,]
+testset <- data[-inTrain,]
+```
+
+# Prediction Model Development
+
+For this exercise, random forest model is chosen, given the higher accuracy achieved.  For efficiency (faster run-time), the tree has been limited to 50. 
+
+```{r}
+#?randomForest
+fitControl <- trainControl(method = "repeatedcv",
+                           number = 10,
+                           repeats = 10)
+data.rf <- train(classe ~ .,
+                 method="rf",
+                 data=trainset, 
+                 ntree=50, 
+                 trControl=fitControl)
+data.rf
+plot(data.rf)
+```
+
+A prediction is then generated and evaluated.
+
+```{r}
+data.pred = predict(data.rf, testset)
+table(data.pred, testset$classe)
+confusionMatrix(data.pred, testset$classe)
+```
+
+Based on this exercise, a prediction model limited to 150 trees has produced an accuracy of % with a kappa value 
